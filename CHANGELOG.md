@@ -1,11 +1,11 @@
-slurm-cookbook CHANGELOG
+slurm CHANGELOG
 ========================
 
-This file is used to list changes made in each version of the slurm-cookbook cookbook.
+This file is used to list changes made in each version of the slurm cookbook.
 
 0.1.0
 -----
-- [your_name] - Initial release of slurm-cookbook
+- David Brown <david.brown@pnnl.gov> - Initial release of slurm
 
 - - -
 Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.

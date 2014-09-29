@@ -1,4 +1,4 @@
-slurm-cookbook Cookbook
+SLURM Cookbook
 =======================
 TODO: Enter the cookbook description here.
 
@@ -7,18 +7,14 @@ This cookbook makes your favorite breakfast sandwich.
 
 Requirements
 ------------
-TODO: List your cookbook requirements. Be sure to include any requirements this cookbook has on platforms, libraries, other cookbooks, packages, operating systems, etc.
 
-e.g.
 #### packages
-- `toaster` - slurm-cookbook needs toaster to brown your bagel.
+- `yum-epel` - slurm needs munge from EPEL on RHEL like systems.
 
 Attributes
 ----------
-TODO: List your cookbook attributes here.
 
-e.g.
-#### slurm-cookbook::default
+#### slurm::default
 <table>
   <tr>
     <th>Key</th>
@@ -27,26 +23,24 @@ e.g.
     <th>Default</th>
   </tr>
   <tr>
-    <td><tt>['slurm-cookbook']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
+    <td><tt>['slurm']['cluster_name']</tt></td>
+    <td>String</td>
+    <td>Cluster your node is associated with</td>
+    <td><tt>localhost</tt></td>
   </tr>
 </table>
 
 Usage
 -----
-#### slurm-cookbook::default
-TODO: Write usage instructions for each cookbook.
+#### slurm::default
 
-e.g.
-Just include `slurm-cookbook` in your node's `run_list`:
+Just include `slurm` in your node's `run_list`:
 
 ```json
 {
   "name":"my_node",
   "run_list": [
-    "recipe[slurm-cookbook]"
+    "recipe[slurm]"
   ]
 }
 ```
