@@ -31,20 +31,20 @@ default['slurm']['slurm']['config'] = [
 ]
 # NodeName=localhost Procs=8 State=DRAIN
 default['slurm']['slurm']['nodes'] = [
-  {
+  [
     ["NodeName", "localhost"],
     ["Procs", "1"],
     ["State", "DRAIN"]
-  },
+  ],
 ]
 # PartitionName=local Nodes=localhost Default=YES Shared=YES
 default['slurm']['slurm']['partitions'] = [
-  {
+  [
     ["PartitionName", "local"],
     ["Nodes", "localhost"],
     ["Default", "YES"],
     ["Shared", "YES"]
-  },
+  ],
 ]
 
 # AuthType=auth/munge
@@ -70,12 +70,15 @@ default['slurm']['slurmdbd']['config'] = [
 
 case node['platform_family']
 when 'rhel', 'centos'
-  defaults['slurm']['pkgrepos'] = ['yum-epel']
-  defaults['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+  default['slurm']['pkgrepos'] = ['yum-epel']
+  default['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+  default['slurm']['configdir'] = '/etc/slurm-llnl'
 when 'fedora'
-  defaults['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+  default['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+  default['slurm']['configdir'] = '/etc/slurm'
 when 'debian'
-  defaults['slurm']['packages'] = ['slurm-llnl', 'slurm-llnl-basic-plugins', 'slurm-llnl-slurmdbd', 'munge']
+  default['slurm']['packages'] = ['slurm-llnl', 'slurm-llnl-basic-plugins', 'slurm-llnl-slurmdbd', 'munge']
+  default['slurm']['configdir'] = '/etc/slurm-llnl'
 else
   Chef::Log.error("Unsupported Platform Family: #{node['platform_family']}")
 end
