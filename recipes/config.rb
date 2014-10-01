@@ -6,8 +6,8 @@ template slurm_conf do
   group "root"
   mode "0644"
   variables(
-    :config => node['slurm']['slurm']['config']
-    :nodes => node['slurm']['slurm']['nodes']
+    :config => node['slurm']['slurm']['config'],
+    :nodes => node['slurm']['slurm']['nodes'],
     :partitions => node['slurm']['slurm']['partitions']
   )
 done
