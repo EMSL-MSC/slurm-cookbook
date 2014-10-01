@@ -28,6 +28,24 @@ Attributes
     <td>Cluster your node is associated with</td>
     <td><tt>localhost</tt></td>
   </tr>
+  <tr>
+    <td><tt>['slurm']['slurm']['partition']</tt></td>
+    <td>Array of hashes</td>
+    <td>Partitions for your slurm cluster</td>
+    <td><tt>[]</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['slurm']['slurm']['config']</tt></td>
+    <td>Array of key value pairs</td>
+    <td>Config options dropped into slurm.conf</td>
+    <td><tt>[]</tt></td>
+  </tr>
+  <tr>
+    <td><tt>['slurm']['slurmdbd']['config']</tt></td>
+    <td>Array of key value pairs</td>
+    <td>Config options dropped into slurmdbd.conf</td>
+    <td><tt>[]</tt></td>
+  </tr>
 </table>
 
 Usage
