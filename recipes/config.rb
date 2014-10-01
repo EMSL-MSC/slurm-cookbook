@@ -10,5 +10,5 @@ template slurm_conf do
     :nodes => node['slurm']['slurm']['nodes'],
     :partitions => node['slurm']['slurm']['partitions']
   )
-done
+end
 
