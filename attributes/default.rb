@@ -31,20 +31,20 @@ default['slurm']['slurm']['config'] = {
 }
 # NodeName=localhost Procs=8 State=DRAIN
 default['slurm']['slurm']['nodes'] = [
-  [
-    ["NodeName", "localhost"],
-    ["Procs", "1"],
-    ["State", "DRAIN"]
-  ],
+  {
+    "NodeName" => "localhost",
+    "Procs" => "1",
+    "State" => "DRAIN"
+  },
 ]
 # PartitionName=local Nodes=localhost Default=YES Shared=YES
 default['slurm']['slurm']['partitions'] = [
-  [
-    ["PartitionName", "local"],
-    ["Nodes", "localhost"],
-    ["Default", "YES"],
-    ["Shared", "YES"]
-  ],
+  {
+    "PartitionName" => "local",
+    "Nodes" => "localhost",
+    "Default" => "YES",
+    "Shared" => "YES"
+  },
 ]
 
 # AuthType=auth/munge
