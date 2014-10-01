@@ -11,4 +11,9 @@
 <%= key %>=<%= @config[key] %>
     <% end %>
 <%- end %>
-
+<%- @nodes.each do |line| %>
+<%= line %>
+<%- end %>
+<%- @partitions.each do |line| %>
+<%= line %>
+<%- end %>
