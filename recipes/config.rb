@@ -1,6 +1,6 @@
 include_recipe "slurm::install"
 
-template slurm_conf do
+template "slurm_conf" do
   path node['slurm']['configdir']+"/slurm.conf"
   owner "root"
   group "root"
