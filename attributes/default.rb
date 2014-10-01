@@ -24,11 +24,11 @@ default['slurm']['slurmdbd']['backend_recipe'] = "mysql::server"
 # AuthType=auth/munge
 # SelectType=select/cons_res
 # SelectTypeParameters=CR_CORE
-default['slurm']['slurm']['config'] = [
-  ["ControlMachine", "localhost"],
-  ["ClusterName", "localhost"],
-  ["AuthType", "auth/munge"]
-]
+default['slurm']['slurm']['config'] = {
+  "ControlMachine" => "localhost",
+  "ClusterName" => "localhost",
+  "AuthType" => "auth/munge"
+}
 # NodeName=localhost Procs=8 State=DRAIN
 default['slurm']['slurm']['nodes'] = [
   [
