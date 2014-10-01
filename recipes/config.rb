@@ -16,7 +16,7 @@ node['slurm']['slurm']['partitions'].each do |part_hash|
   part = ""
   part_hash.keys.each do |key|
     if not part_hash[key].nil?
-      part = key + "=" + part_hash[key] + " "
+      part += key + "=" + part_hash[key] + " "
     end
   end
   partition_lines.push(part)
