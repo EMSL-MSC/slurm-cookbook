@@ -1,4 +1,5 @@
-include_recipe "slurm::install"
+include_recipe 'slurm::install'
+include_recipe 'slurm::munge'
 
 node_lines = []
 node['slurm']['slurm']['nodes'].each do |line_hash|
@@ -32,5 +33,6 @@ template "slurm_conf" do
     :nodes => node_lines,
     :partitions => partition_lines
   )
+  notifies :restart, 'service['+node['slurm']['service_name']+']'
 end
 

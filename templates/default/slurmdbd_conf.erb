@@ -1,0 +1,13 @@
+#
+# SLURM Database Daemon Configuration
+#
+# Managed by Chef so don't touch
+#
+# Thanks
+#
+
+<%- @config.to_hash.keys.sort.each do |key| %>
+    <%- if not @config[key].nil? %>
+<%= key %>=<%= @config[key] %>
+    <% end %>
+<%- end %>

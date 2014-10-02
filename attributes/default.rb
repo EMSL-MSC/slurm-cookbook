@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 default['slurm']['cluster_name'] = "localhost"
-default['slurm']['slurmdbd']['backend_recipe'] = "mysql::server"
 
 # ControlMachine=localhost
 # ClusterName=localhost
@@ -56,29 +55,48 @@ default['slurm']['slurm']['partitions'] = [
 # StoragePass=slurm
 # StorageType=accounting_storage/mysql
 # LogFile=/var/log/slurmdbd.log
-default['slurm']['slurmdbd']['config'] = [
-  ["AuthType", "auth/munge"],
-  ["DbdHost", "localhost"],
-  ["DbdBackupHost", "localhost"],
-  ["StorageHost", "localhost"],
-  ["StorageLoc", "slurmdb"],
-  ["StorageUser", "slurm"],
-  ["StoragePass", "slurm"],
-  ["StorageType", "accounting_storage/mysql"],
-  ["LogFile", "/var/log/slurmdbd.log"]
-]
+default['slurm']['slurmdbd']['config'] = {
+  "AuthType" => "auth/munge",
+  "DbdHost" => "localhost",
+  "DbdBackupHost" => "",
+  "StorageHost" => "localhost",
+  "StorageLoc" => "slurmdb",
+  "StorageUser" => "slurm",
+  "StoragePass" => "slurm",
+  "StorageType" => "accounting_storage/mysql",
+  "LogFile" => "/var/log/slurmdbd.log"
+}
+
+# for local mysqldb setup
+default['slurm']['slurmdbd']['localdb'] = true
+default['mysql']['version'] = '5.1'
+default['mysql']['port'] = '3307'
+default['mysql']['data_dir'] = '/data'
+default['mysql']['template_source'] = 'custom.erb'
+default['mysql']['root_network_acl'] = ['127.0.0.1/32']
+default['mysql']['allow_remote_root'] = false
+default['mysql']['remove_anonymous_users'] = false
+default['mysql']['remove_test_database'] = false
+default['mysql']['server_root_password'] = 'password'
+default['mysql']['server_repl_password'] = 'password'
 
 case node['platform_family']
 when 'rhel', 'centos'
   default['slurm']['pkgrepos'] = ['yum-epel']
   default['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
   default['slurm']['configdir'] = '/etc/slurm-llnl'
+  default['slurm']['service_name'] = 'slurm'
+  default['slurm']['service_db_name'] = 'slurmdbd'
 when 'fedora'
   default['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
   default['slurm']['configdir'] = '/etc/slurm'
+  default['slurm']['service_name'] = 'slurm'
+  default['slurm']['service_db_name'] = 'slurmdbd'
 when 'debian'
   default['slurm']['packages'] = ['slurm-llnl', 'slurm-llnl-basic-plugins', 'slurm-llnl-slurmdbd', 'munge']
   default['slurm']['configdir'] = '/etc/slurm-llnl'
+  default['slurm']['service_name'] = 'slurm-llnl'
+  default['slurm']['service_db_name'] = 'slurm-llnl-slurmdbd'
 else
   Chef::Log.error("Unsupported Platform Family: #{node['platform_family']}")
 end
