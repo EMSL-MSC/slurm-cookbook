@@ -1,11 +1,17 @@
 include_recipe "slurm::config"
+package 'build-essential' do
+  action :nothing
+end.run_action(:install)
+package node['mysql']['client_devel_package'] do
+  action :nothing
+end.run_action(:install)
 
-if node['slurm']['slurmdbd']['localdb'].nil?
+if node['slurm']['slurmdbd']['localdb']
   mysql_service 'default' do
     version node['mysql']['version']
+    package_name node['mysql']['package_name']
     port node['mysql']['port']
     data_dir node['mysql']['data_dir']
-    template_source node['mysql']['template_source']
     allow_remote_root node['mysql']['allow_remote_root']
     root_network_acl node['mysql']['root_network_acl']
     remove_anonymous_users node['mysql']['remove_anonymous_users']
@@ -34,10 +40,12 @@ if node['slurm']['slurmdbd']['localdb'].nil?
   end
 
   mysql_connection_info = {
-    :host => slurmdbd_host
+    :host => slurmdbd_host,
     :username => 'root',
     :password => node['mysql']['server_root_password']
   }
+
+  chef_gem "mysql"
 
   mysql_database slurmdbd_db do
     connection mysql_connection_info
@@ -68,7 +76,7 @@ template "slurmdbd_conf" do
   variables(
     :config => node['slurm']['slurmdbd']['config']
   )
-  notifies :restart, 'service['+node['slurm']['service_db_name']+']'
+  notifies :restart, 'service[slurmdbd]'
 end
 
 service 'slurmdbd' do

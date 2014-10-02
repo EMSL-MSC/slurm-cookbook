@@ -26,7 +26,8 @@ default['slurm']['cluster_name'] = "localhost"
 default['slurm']['slurm']['config'] = {
   "ControlMachine" => "localhost",
   "ClusterName" => "localhost",
-  "AuthType" => "auth/munge"
+  "AuthType" => "auth/munge",
+  "AccountingStorageType" => "accounting_storage/slurmdbd"
 }
 # NodeName=localhost Procs=8 State=DRAIN
 default['slurm']['slurm']['nodes'] = [
@@ -58,7 +59,6 @@ default['slurm']['slurm']['partitions'] = [
 default['slurm']['slurmdbd']['config'] = {
   "AuthType" => "auth/munge",
   "DbdHost" => "localhost",
-  "DbdBackupHost" => "",
   "StorageHost" => "localhost",
   "StorageLoc" => "slurmdb",
   "StorageUser" => "slurm",
@@ -69,10 +69,9 @@ default['slurm']['slurmdbd']['config'] = {
 
 # for local mysqldb setup
 default['slurm']['slurmdbd']['localdb'] = true
-default['mysql']['version'] = '5.1'
-default['mysql']['port'] = '3307'
+default['mysql']['port'] = '3306'
+default['mysql']['package_name'] = 'mysql-server'
 default['mysql']['data_dir'] = '/data'
-default['mysql']['template_source'] = 'custom.erb'
 default['mysql']['root_network_acl'] = ['127.0.0.1/32']
 default['mysql']['allow_remote_root'] = false
 default['mysql']['remove_anonymous_users'] = false
@@ -87,16 +86,22 @@ when 'rhel', 'centos'
   default['slurm']['configdir'] = '/etc/slurm-llnl'
   default['slurm']['service_name'] = 'slurm'
   default['slurm']['service_db_name'] = 'slurmdbd'
+  default['mysql']['version'] = '5.1'
+  default['mysql']['client_devel_package'] = 'mysql-devel'
 when 'fedora'
   default['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
   default['slurm']['configdir'] = '/etc/slurm'
   default['slurm']['service_name'] = 'slurm'
   default['slurm']['service_db_name'] = 'slurmdbd'
+  default['mysql']['version'] = '5.5'
+  default['mysql']['client_devel_package'] = 'mysql-devel'
 when 'debian'
   default['slurm']['packages'] = ['slurm-llnl', 'slurm-llnl-basic-plugins', 'slurm-llnl-slurmdbd', 'munge']
   default['slurm']['configdir'] = '/etc/slurm-llnl'
   default['slurm']['service_name'] = 'slurm-llnl'
   default['slurm']['service_db_name'] = 'slurm-llnl-slurmdbd'
+  default['mysql']['version'] = '5.5'
+  default['mysql']['client_devel_package'] = 'libmysqlclient-dev'
 else
   Chef::Log.error("Unsupported Platform Family: #{node['platform_family']}")
 end

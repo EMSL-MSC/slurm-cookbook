@@ -1,6 +1,4 @@
 
-package "munge"
-
 if node['slurm'].has_key?("mungekey")
   if node['slurm']['mungekey'].has_key?("type")
     case node['slurm']['mungekey']['type']
@@ -33,9 +31,8 @@ else
   bash "create-munge-key" do
     user "root"
     cwd "/tmp"
-    code <<-EOH
-    test -e /etc/munge/munge.key || create-munge-key
-    EOH
+    code "create-munge-key"
+    not_if "test -e /etc/munge/munge.key"
     notifies :restart, 'service[munge]'
   end
 end

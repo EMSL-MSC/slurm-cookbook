@@ -33,6 +33,6 @@ template "slurm_conf" do
     :nodes => node_lines,
     :partitions => partition_lines
   )
-  notifies :restart, 'service['+node['slurm']['service_name']+']'
+  notifies :restart, 'service[slurm]'
 end
 
