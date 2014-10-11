@@ -1,12 +1,24 @@
 include_recipe "slurm::config"
-package 'build-essential' do
-  action :nothing
-end.run_action(:install)
-package node['mysql']['client_devel_package'] do
-  action :nothing
-end.run_action(:install)
 
 if node['slurm']['slurmdbd']['localdb']
+  case node['platform_family']
+  when 'debian'
+    package 'build-essential' do
+      action :nothing
+    end.run_action(:install)
+  when 'rhel', 'centos', 'fedora'
+    package '@Development Tools' do
+      action :nothing
+    end.run_action(:install)
+  else
+    Chef::Log.error("Unsupported Platform Family: #{node['platform_family']}")
+  end
+  package node['mysql']['client_devel_package'] do
+    action :nothing
+  end.run_action(:install)
+
+  chef_gem "mysql"
+
   mysql_service 'default' do
     version node['mysql']['version']
     package_name node['mysql']['package_name']
@@ -45,7 +57,6 @@ if node['slurm']['slurmdbd']['localdb']
     :password => node['mysql']['server_root_password']
   }
 
-  chef_gem "mysql"
 
   mysql_database slurmdbd_db do
     connection mysql_connection_info
