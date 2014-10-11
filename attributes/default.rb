@@ -18,33 +18,33 @@
 #
 default['slurm']['cluster_name'] = "14.03.8"
 default['slurm']['cluster_name'] = "localhost"
-default['slurm']['slurmdbd']['backend_recipe'] = "mysql::server"
 
 # ControlMachine=localhost
 # ClusterName=localhost
 # AuthType=auth/munge
 # SelectType=select/cons_res
 # SelectTypeParameters=CR_CORE
-default['slurm']['slurm']['config'] = [
-  ["ControlMachine", "localhost"],
-  ["ClusterName", "localhost"],
-  ["AuthType", "auth/munge"]
-]
+default['slurm']['slurm']['config'] = {
+  "ControlMachine" => "localhost",
+  "ClusterName" => "localhost",
+  "AuthType" => "auth/munge",
+  "AccountingStorageType" => "accounting_storage/slurmdbd"
+}
 # NodeName=localhost Procs=8 State=DRAIN
 default['slurm']['slurm']['nodes'] = [
   {
-    ["NodeName", "localhost"],
-    ["Procs", "1"],
-    ["State", "DRAIN"]
+    "NodeName" => "localhost",
+    "Procs" => "1",
+    "State" => "DRAIN"
   },
 ]
 # PartitionName=local Nodes=localhost Default=YES Shared=YES
 default['slurm']['slurm']['partitions'] = [
   {
-    ["PartitionName", "local"],
-    ["Nodes", "localhost"],
-    ["Default", "YES"],
-    ["Shared", "YES"]
+    "PartitionName" => "local",
+    "Nodes" => "localhost",
+    "Default" => "YES",
+    "Shared" => "YES"
   },
 ]
 
@@ -57,26 +57,52 @@ default['slurm']['slurm']['partitions'] = [
 # StoragePass=slurm
 # StorageType=accounting_storage/mysql
 # LogFile=/var/log/slurmdbd.log
-default['slurm']['slurmdbd']['config'] = [
-  ["AuthType", "auth/munge"],
-  ["DbdHost", "localhost"],
-  ["DbdBackupHost", "localhost"],
-  ["StorageHost", "localhost"],
-  ["StorageLoc", "slurmdb"],
-  ["StorageUser", "slurm"],
-  ["StoragePass", "slurm"],
-  ["StorageType", "accounting_storage/mysql"],
-  ["LogFile", "/var/log/slurmdbd.log"]
-]
+default['slurm']['slurmdbd']['config'] = {
+  "AuthType" => "auth/munge",
+  "DbdHost" => "localhost",
+  "StorageHost" => "localhost",
+  "StorageLoc" => "slurmdb",
+  "StorageUser" => "slurm",
+  "StoragePass" => "slurm",
+  "StorageType" => "accounting_storage/mysql",
+  "LogFile" => "/var/log/slurmdbd.log"
+}
+
+# for local mysqldb setup
+default['slurm']['slurmdbd']['localdb'] = true
+default['mysql']['port'] = '3306'
+default['mysql']['package_name'] = 'mysql-server'
+default['mysql']['data_dir'] = '/data'
+default['mysql']['root_network_acl'] = ['127.0.0.1/32']
+default['mysql']['allow_remote_root'] = false
+default['mysql']['remove_anonymous_users'] = false
+default['mysql']['remove_test_database'] = false
+default['mysql']['server_root_password'] = 'password'
+default['mysql']['server_repl_password'] = 'password'
 
 case node['platform_family']
 when 'rhel', 'centos'
-  defaults['slurm']['pkgrepos'] = ['yum-epel']
-  defaults['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+  default['slurm']['pkgrepos'] = ['yum-epel']
+  default['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+  default['slurm']['configdir'] = '/etc/slurm-llnl'
+  default['slurm']['service_name'] = 'slurm'
+  default['slurm']['service_db_name'] = 'slurmdbd'
+  default['mysql']['version'] = '5.1'
+  default['mysql']['client_devel_package'] = 'mysql-devel'
 when 'fedora'
-  defaults['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+  default['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+  default['slurm']['configdir'] = '/etc/slurm'
+  default['slurm']['service_name'] = 'slurm'
+  default['slurm']['service_db_name'] = 'slurmdbd'
+  default['mysql']['version'] = '5.5'
+  default['mysql']['client_devel_package'] = 'mysql-devel'
 when 'debian'
-  defaults['slurm']['packages'] = ['slurm-llnl', 'slurm-llnl-basic-plugins', 'slurm-llnl-slurmdbd', 'munge']
+  default['slurm']['packages'] = ['slurm-llnl', 'slurm-llnl-basic-plugins', 'slurm-llnl-slurmdbd', 'munge']
+  default['slurm']['configdir'] = '/etc/slurm-llnl'
+  default['slurm']['service_name'] = 'slurm-llnl'
+  default['slurm']['service_db_name'] = 'slurm-llnl-slurmdbd'
+  default['mysql']['version'] = '5.5'
+  default['mysql']['client_devel_package'] = 'libmysqlclient-dev'
 else
   Chef::Log.error("Unsupported Platform Family: #{node['platform_family']}")
 end
