@@ -18,6 +18,7 @@
 #
 default['slurm']['version'] = "14.03.8"
 default['slurm']['cluster_name'] = "localhost"
+default['slurm']['url'] = "http://www.schedmd.com/download/latest/slurm-14.03.8.tar.bz2"
 
 # ControlMachine=localhost
 # ClusterName=localhost
@@ -83,14 +84,14 @@ default['mysql']['server_repl_password'] = 'password'
 case node['platform_family']
 when 'rhel', 'centos'
   default['slurm']['pkgrepos'] = ['yum-epel']
-  default['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
-  default['slurm']['configdir'] = '/etc/slurm-llnl'
+  default['slurm']['packages'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+  default['slurm']['configdir'] = '/etc/slurm'
   default['slurm']['service_name'] = 'slurm'
   default['slurm']['service_db_name'] = 'slurmdbd'
   default['mysql']['version'] = '5.1'
   default['mysql']['client_devel_package'] = 'mysql-devel'
 when 'fedora'
-  default['slurm']['packages'] = ['slurm', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+  default['slurm']['packages'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
   default['slurm']['configdir'] = '/etc/slurm'
   default['slurm']['service_name'] = 'slurm'
   default['slurm']['service_db_name'] = 'slurmdbd'

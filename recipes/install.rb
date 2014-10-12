@@ -1,4 +1,38 @@
 
+case node['platform_family']
+when 'debian'
+  package 'build-essential' do
+    action :nothing
+  end.run_action(:install)
+when 'rhel', 'centos', 'fedora'
+  %w{
+    createrepo
+    gcc
+    glibc-devel
+    make
+    gtk2-devel
+    pkgconfig
+    ncurses-devel
+    readline-devel
+    openssl-devel
+    mysql-devel
+    numactl-devel
+    hwloc-devel
+    glib2-devel
+    perl-devel
+    perl(ExtUtils::MakeMaker)
+    lua-devel
+    pam-devel
+    rpm-build
+  }.each do |pkg|
+    package pkg do
+      action :nothing
+    end.run_action(:install)
+  end
+else
+  Chef::Log.error("Unsupported Platform Family: #{node['platform_family']}")
+end
+
 if node['slurm'].has_key?('buildit') and node['slurm']['buildit']
   if node['platform_family'] == 'rhel' or node['platform_family'] == 'centos'
     include_recipe "yum-epel::default"
@@ -11,6 +45,7 @@ if node['slurm'].has_key?('buildit') and node['slurm']['buildit']
         mode "0755"
         action :create
       end
+      package "munge-devel"
       slurm_build "slurm" do
         version node['slurm']['version']
         url node['slurm']['source_url']
@@ -19,9 +54,9 @@ if node['slurm'].has_key?('buildit') and node['slurm']['buildit']
       yum_repository 'local-slurm' do
         description "Local Slurm Repository"
         baseurl "file:///opt/local-slurm"
-        gpgcheck 0
-        enabled 1
-        priority 99
+        gpgcheck false
+        enabled true
+        priority "99"
         action :create
       end
   else
