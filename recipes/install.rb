@@ -4,7 +4,7 @@ when 'debian'
   package 'build-essential' do
     action :nothing
   end.run_action(:install)
-when 'rhel', 'centos', 'fedora'
+when 'rhel', 'fedora'
   %w{
     createrepo
     gcc
@@ -38,7 +38,7 @@ if node['slurm'].has_key?('buildit') and node['slurm']['buildit']
     include_recipe "yum-epel::default"
   end
   case node['platform_family']
-    when 'rhel', 'centos', 'fedora'
+    when 'rhel', 'fedora'
       directory "/opt/local-slurm" do
         owner "root"
         group "root"

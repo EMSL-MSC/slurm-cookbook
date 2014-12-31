@@ -15,13 +15,13 @@ action :create do
 	else
 		Chef::Log.warn "Need to build slurm and put it in "+@new_resource.output_rpms
 		saved_tarball = @new_resource.output_rpms+"/"+::File.basename(node["slurm"]["url"])
-		if not system("curl -o "+saved_tarball+" "+node["slurm"]["url"])
+		if not Mixlib::ShellOut("curl -o "+saved_tarball+" "+node["slurm"]["url"])
 			Chef::Log.error "failed to download slurm"
-		elsif not system("rpmbuild -ta --define '_rpmdir "+@new_resource.output_rpms+"' --with mysql --with munge "+saved_tarball)
+		elsif not Mixlib::ShellOut("rpmbuild -ta --define '_rpmdir "+@new_resource.output_rpms+"' --with mysql --with munge "+saved_tarball)
 			Chef::Log.error "failed to build slurm"
-		elsif not system("createrepo "+@new_resource.output_rpms)
+		elsif not Mixlib::ShellOut("createrepo "+@new_resource.output_rpms)
 			Chef::Log.error "failed to create repository"
-		elsif not system("touch "+@new_resource.output_rpms+"/.chef-check")
+		elsif not Mixlib::ShellOut("touch "+@new_resource.output_rpms+"/.chef-check")
 			Chef::Log.error "failed to add chef check"
 		else
 			Chef::Log.info "completed slurm build"

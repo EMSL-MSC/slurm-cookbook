@@ -82,14 +82,17 @@ default['mysql']['server_root_password'] = 'password'
 default['mysql']['server_repl_password'] = 'password'
 
 case node['platform_family']
-when 'rhel', 'centos'
-  default['slurm']['pkgrepos'] = ['yum-epel']
-  default['slurm']['packages'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
-  default['slurm']['configdir'] = '/etc/slurm'
-  default['slurm']['service_name'] = 'slurm'
-  default['slurm']['service_db_name'] = 'slurmdbd'
-  default['mysql']['version'] = '5.1'
-  default['mysql']['client_devel_package'] = 'mysql-devel'
+when 'rhel'
+  case node['platform']
+  when 'centos'
+    default['slurm']['pkgrepos'] = ['yum-epel']
+    default['slurm']['packages'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+    default['slurm']['configdir'] = '/etc/slurm'
+    default['slurm']['service_name'] = 'slurm'
+    default['slurm']['service_db_name'] = 'slurmdbd'
+    default['mysql']['version'] = '5.1'
+    default['mysql']['client_devel_package'] = 'mysql-devel'
+  end
 when 'fedora'
   default['slurm']['packages'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
   default['slurm']['configdir'] = '/etc/slurm'
