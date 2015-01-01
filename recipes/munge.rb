@@ -21,11 +21,16 @@ if node['slurm'].has_key?("mungekey")
     user "munge"
     group "munge"
     mode "0400"
-    path "/etc/munge/munge.key"
+    path "/etc/munge/munge.key.base64"
+    notifies :run, "execute[convert-mungekey]"
     source "mungekey.erb"
     variables({
-      :data => key_hash['data']
+      :data => key_hash['mungekey']
     })
+  end
+  execute "convert-mungekey" do
+    command "base64 -d < /etc/munge/munge.key.base64 > /etc/munge/munge.key"
+    action :nothing
   end
 else
   bash "create-munge-key" do
