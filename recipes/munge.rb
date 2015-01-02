@@ -3,6 +3,10 @@ when 'rhel'
   include_recipe "yum-epel"
 end
 
+directory "/var/log" do
+  mode '0755'
+end
+
 package "munge"
 
 if node['slurm'].has_key?("mungekey")
@@ -46,10 +50,6 @@ else
     not_if "test -e /etc/munge/munge.key"
     notifies :restart, 'service[munge]'
   end
-end
-
-directory "/var/log" do
-  mode '0755'
 end
 
 service 'munge' do
