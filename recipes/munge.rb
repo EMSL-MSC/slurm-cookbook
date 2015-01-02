@@ -27,7 +27,7 @@ if node['slurm'].has_key?("mungekey")
   end
   key_hash = key_item.to_hash()
   # wait this is binary and needs to be a file
-  template "mungekey" do
+  template "mungekey.ascii" do
     user "munge"
     group "munge"
     mode "0400"
@@ -41,6 +41,7 @@ if node['slurm'].has_key?("mungekey")
   execute "convert-mungekey" do
     command "base64 -d < /etc/munge/munge.key.base64 > /etc/munge/munge.key"
     action :nothing
+    notifies :restart, 'service[munge]'
   end
 else
   bash "create-munge-key" do
@@ -50,6 +51,13 @@ else
     not_if "test -e /etc/munge/munge.key"
     notifies :restart, 'service[munge]'
   end
+end
+
+file "mungekey" do
+  user "munge"
+  group "munge"
+  mode "0400"
+  path "/etc/munge/munge.key"
 end
 
 service 'munge' do
