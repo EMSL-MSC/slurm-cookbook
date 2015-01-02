@@ -1,50 +1,20 @@
 include_recipe 'slurm::munge'
 
-case node['platform_family']
-when 'debian'
-  package 'build-essential' do
-    action :nothing
-  end.run_action(:install)
-when 'rhel', 'fedora'
-  %w{
-    createrepo
-    gcc
-    glibc-devel
-    make
-    gtk2-devel
-    pkgconfig
-    ncurses-devel
-    readline-devel
-    openssl-devel
-    mysql-devel
-    numactl-devel
-    hwloc-devel
-    glib2-devel
-    perl-devel
-    perl(ExtUtils::MakeMaker)
-    lua-devel
-    pam-devel
-    rpm-build
-    munge-devel
-  }.each do |pkg|
-    package pkg do
-      action :nothing
-    end.run_action(:install)
-  end
-else
-  Chef::Log.error("Unsupported Platform Family: #{node['platform_family']}")
-end
-
 if node['slurm'].has_key?('buildit') and node['slurm']['buildit']
   case node['platform_family']
     when 'rhel', 'fedora'
+      node['slurm']['packages']['build'].each do |pkg|
+        package pkg
+      end
       directory "/opt/local-slurm" do
         owner "root"
         group "root"
         mode "0755"
         action :create
       end
+      package "createrepo"
       slurm_build "slurm" do
+        rpmbuildopts node['slurm']['rpmbuildopts']
         version node['slurm']['version']
         url node['slurm']['source_url']
         output_rpms "/opt/local-slurm"
@@ -62,7 +32,7 @@ if node['slurm'].has_key?('buildit') and node['slurm']['buildit']
   end
 end
 
-node['slurm']['packages'].each do |name|
+node['slurm']['packages']['slurm'].each do |name|
   package name
 end
 

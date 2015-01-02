@@ -16,9 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-default['slurm']['version'] = "14.03.8"
+default['slurm']['version'] = "14.11.2"
 default['slurm']['cluster_name'] = "localhost"
-default['slurm']['url'] = "http://www.schedmd.com/download/latest/slurm-14.03.8.tar.bz2"
+default['slurm']['url'] = "http://www.schedmd.com/download/latest/slurm-#{node['slurm']['version']}.tar.bz2"
 
 # ControlMachine=localhost
 # ClusterName=localhost
@@ -82,34 +82,54 @@ default['mysql']['server_root_password'] = 'password'
 default['mysql']['server_repl_password'] = 'password'
 
 case node['platform_family']
+when 'rhel', 'fedora'
+  default['slurm']['packages']['build'] = [
+      'gcc',
+      'make',
+      'gtk2-devel',
+      'pkgconfig',
+      'ncurses-devel',
+      'readline-devel',
+      'openssl-devel',
+      'numactl-devel',
+      'hwloc-devel',
+      'glib2-devel',
+      'perl-devel',
+      'perl(ExtUtils::MakeMaker)',
+      'lua-devel',
+      'pam-devel',
+      'rpm-build',
+      'munge-devel',
+      'glibc-devel'
+  ]
+end
+default['slurm']['rpmbuildopts'] = "--with numactl --with hwloc --with munge"
+
+case node['platform_family']
 when 'rhel'
   case node['platform']
   when 'centos'
     default['slurm']['buildit'] = true
     default['slurm']['pkgrepos'] = ['yum-epel']
-    default['slurm']['packages'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+    default['slurm']['packages']['slurm'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
     default['slurm']['configdir'] = '/etc/slurm'
     default['slurm']['service_name'] = 'slurm'
     default['slurm']['service_db_name'] = 'slurmdbd'
-    default['mysql']['version'] = '5.1'
-    default['mysql']['client_devel_package'] = 'mysql-devel'
   end
 when 'fedora'
   default['slurm']['buildit'] = true
-  default['slurm']['packages'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
+  default['slurm']['packages']['slurm'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
   default['slurm']['configdir'] = '/etc/slurm'
   default['slurm']['service_name'] = 'slurm'
   default['slurm']['service_db_name'] = 'slurmdbd'
-  default['mysql']['version'] = '5.5'
-  default['mysql']['client_devel_package'] = 'mysql-devel'
 when 'debian'
   default['slurm']['buildit'] = false
-  default['slurm']['packages'] = ['slurm-llnl', 'slurm-llnl-basic-plugins', 'slurm-llnl-slurmdbd', 'munge']
+  default['slurm']['packages']['slurm'] = ['slurm-llnl', 'slurm-llnl-basic-plugins', 'slurm-llnl-slurmdbd', 'munge']
+  # we don't build for this OS
+  default['slurm']['packages']['build'] = []
   default['slurm']['configdir'] = '/etc/slurm-llnl'
   default['slurm']['service_name'] = 'slurm-llnl'
   default['slurm']['service_db_name'] = 'slurm-llnl-slurmdbd'
-  default['mysql']['version'] = '5.5'
-  default['mysql']['client_devel_package'] = 'libmysqlclient-dev'
 else
   Chef::Log.error("Unsupported Platform Family: #{node['platform_family']}")
 end
