@@ -1,3 +1,9 @@
+case node['platform_family']
+when 'rhel'
+  include_recipe "yum-epel"
+end
+
+package "munge"
 
 if node['slurm'].has_key?("mungekey")
   if node['slurm']['mungekey'].has_key?("type")
@@ -6,16 +12,16 @@ if node['slurm'].has_key?("mungekey")
       chef_gem "chef-vault"
       require 'chef-vault'
       key_item = ChefVault::Item.load("slurm", "mungekey")
-      key_hash = key_item.to_hash()
     when 'databag'
-      key_item = data_bag_item("slurm", "mungekey")
-      key_hash = key_item.to_hash()
+      secret_key = Chef::EncryptedDataBagItem.load_secret(Chef::Config['encrypted_data_bag_secret'])
+      key_item = Chef::EncryptedDataBagItem.load("slurm", "mungekey", secret_key)
     else
       Chef::Log.error("munge key type needs to be one of vault or databag.")
     end
   else
     Chef::Log.error("node[:slurm][:mungekey] needs a type attribute.")
   end
+  key_hash = key_item.to_hash()
   # wait this is binary and needs to be a file
   template "mungekey" do
     user "munge"
