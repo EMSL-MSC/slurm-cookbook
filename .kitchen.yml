@@ -37,3 +37,7 @@ suites:
   - name: munge-default
     run_list:
       - recipe[slurm::munge]
+
+  - name: slurm-install
+    run_list:
+      - recipe[slurm::install]

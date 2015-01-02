@@ -1,3 +1,4 @@
+include_recipe 'slurm::munge'
 
 case node['platform_family']
 when 'debian'
@@ -24,6 +25,7 @@ when 'rhel', 'fedora'
     lua-devel
     pam-devel
     rpm-build
+    munge-devel
   }.each do |pkg|
     package pkg do
       action :nothing
@@ -34,9 +36,6 @@ else
 end
 
 if node['slurm'].has_key?('buildit') and node['slurm']['buildit']
-  if node['platform_family'] == 'rhel' or node['platform_family'] == 'centos'
-    include_recipe "yum-epel::default"
-  end
   case node['platform_family']
     when 'rhel', 'fedora'
       directory "/opt/local-slurm" do
@@ -45,7 +44,6 @@ if node['slurm'].has_key?('buildit') and node['slurm']['buildit']
         mode "0755"
         action :create
       end
-      package "munge-devel"
       slurm_build "slurm" do
         version node['slurm']['version']
         url node['slurm']['source_url']

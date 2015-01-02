@@ -1,0 +1,1 @@
+../../munge-default/bats/testit.bats

@@ -85,6 +85,7 @@ case node['platform_family']
 when 'rhel'
   case node['platform']
   when 'centos'
+    default['slurm']['buildit'] = true
     default['slurm']['pkgrepos'] = ['yum-epel']
     default['slurm']['packages'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
     default['slurm']['configdir'] = '/etc/slurm'
@@ -94,6 +95,7 @@ when 'rhel'
     default['mysql']['client_devel_package'] = 'mysql-devel'
   end
 when 'fedora'
+  default['slurm']['buildit'] = true
   default['slurm']['packages'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
   default['slurm']['configdir'] = '/etc/slurm'
   default['slurm']['service_name'] = 'slurm'
@@ -101,6 +103,7 @@ when 'fedora'
   default['mysql']['version'] = '5.5'
   default['mysql']['client_devel_package'] = 'mysql-devel'
 when 'debian'
+  default['slurm']['buildit'] = false
   default['slurm']['packages'] = ['slurm-llnl', 'slurm-llnl-basic-plugins', 'slurm-llnl-slurmdbd', 'munge']
   default['slurm']['configdir'] = '/etc/slurm-llnl'
   default['slurm']['service_name'] = 'slurm-llnl'
