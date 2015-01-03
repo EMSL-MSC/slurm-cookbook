@@ -41,4 +41,5 @@ suites:
 
   - name: slurm-install
     run_list:
+      - recipe[apt]
       - recipe[slurm::install]
