@@ -42,4 +42,8 @@ suites:
   - name: slurm-install
     run_list:
       - recipe[apt]
+      - recipe[auto-update]
       - recipe[slurm::install]
+    attributes:
+      auto-update:
+        enabled: true
