@@ -85,6 +85,7 @@ case node['platform_family']
 when 'rhel', 'fedora'
   default['slurm']['packages']['build'] = [
       'gcc',
+      'hwloc',
       'hwloc-devel',
       'make',
       'gtk2-devel',
