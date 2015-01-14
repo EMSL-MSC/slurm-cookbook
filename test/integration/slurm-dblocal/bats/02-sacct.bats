@@ -6,7 +6,7 @@
 }
 
 @test "check_sacctmgr" {
-  run sacctmgr
+  run sacctmgr list Cluster
   [ "$status" -eq 0 ]
 }
 
