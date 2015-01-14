@@ -1,3 +1,4 @@
+node.default['slurm']['slurm']['config']['AccountingStorageType'] = 'accounting_storage/slurmdbd'
 include_recipe "slurm::config"
 
 template "slurmdbd_conf" do

@@ -29,7 +29,7 @@ default['slurm']['slurm']['config'] = {
   "ControlMachine" => "localhost",
   "ClusterName" => "localhost",
   "AuthType" => "auth/munge",
-  "AccountingStorageType" => "accounting_storage/slurmdbd"
+  "AccountingStorageType" => "accounting_storage/none"
 }
 # NodeName=localhost Procs=8 State=DRAIN
 default['slurm']['slurm']['nodes'] = [
