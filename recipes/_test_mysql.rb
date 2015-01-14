@@ -1,5 +1,5 @@
 node.default['slurm']['rpmbuildopts'] += " --with mysql"
-node.default['slurm']['slurm']['config']['AccountingStorageType'] = "accounting_storage/mysql"
+node.default['slurm']['slurmdbd']['config']['AccountingStorageType'] = "accounting_storage/mysql"
 node.default['mysql']['server_root_password'] = "Please-Dont-Use-In-Production"
 node.default['mysql']['server_debian_password'] = "Please-Dont-Use-In-Production"
 node.default['mysql']['server_repl_password'] = "Please-Dont-Use-In-Production"
