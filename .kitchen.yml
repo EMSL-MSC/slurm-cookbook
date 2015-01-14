@@ -41,5 +41,13 @@ suites:
 
   - name: slurm-install
     run_list:
-      - recipe[slurm::_test_base_os]
       - recipe[slurm::install]
+
+  - name: slurm-nodb
+    run_list:
+      - recipe[slurm::slurm]
+
+  - name: slurm-dblocal
+    attributes:
+    run_list:
+      - recipe[slurm::_test_mysql]

@@ -1,0 +1,1 @@
+../../slurm-nodb/bats/submit.bats

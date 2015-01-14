@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-default['slurm']['version'] = "14.11.2"
+default['slurm']['version'] = "14.11.3"
 default['slurm']['cluster_name'] = "localhost"
 default['slurm']['url'] = "http://www.schedmd.com/download/latest/slurm-#{node['slurm']['version']}.tar.bz2"
 
@@ -65,21 +65,9 @@ default['slurm']['slurmdbd']['config'] = {
   "StorageLoc" => "slurmdb",
   "StorageUser" => "slurm",
   "StoragePass" => "slurm",
-  "StorageType" => "accounting_storage/mysql",
+  "StorageType" => "accounting_storage/none",
   "LogFile" => "/var/log/slurmdbd.log"
 }
-
-# for local mysqldb setup
-default['slurm']['slurmdbd']['localdb'] = true
-default['mysql']['port'] = '3306'
-default['mysql']['package_name'] = 'mysql-server'
-default['mysql']['data_dir'] = '/data'
-default['mysql']['root_network_acl'] = ['127.0.0.1/32']
-default['mysql']['allow_remote_root'] = false
-default['mysql']['remove_anonymous_users'] = false
-default['mysql']['remove_test_database'] = false
-default['mysql']['server_root_password'] = 'password'
-default['mysql']['server_repl_password'] = 'password'
 
 case node['platform_family']
 when 'rhel', 'fedora'
@@ -103,6 +91,8 @@ when 'rhel', 'fedora'
       'munge-devel',
       'glibc-devel'
   ]
+else
+  default['slurm']['packages']['build'] = []
 end
 default['slurm']['rpmbuildopts'] = "--with numactl --with hwloc --with munge"
 
@@ -134,4 +124,3 @@ when 'debian'
 else
   Chef::Log.error("Unsupported Platform Family: #{node['platform_family']}")
 end
-
