@@ -6,7 +6,7 @@ end
 use_inline_resources
 
 action :create do
-	if ::File.exists(@current_resource.output_rpms+"/.chef-check")
+	if ::File.exists?(@new_resource.output_rpms+"/.chef-check")
 		Chef::Log.warn "Repos are the same, nothing to do"
 	else
 		Chef::Log.warn "Need to build slurm and put it in "+@new_resource.output_rpms
