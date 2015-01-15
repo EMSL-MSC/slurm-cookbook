@@ -4,6 +4,12 @@ node.default['mysql']['server_root_password'] = "Please-Dont-Use-In-Production"
 node.default['mysql']['server_debian_password'] = "Please-Dont-Use-In-Production"
 node.default['mysql']['server_repl_password'] = "Please-Dont-Use-In-Production"
 
+case node['platform_family']
+when 'rhel', 'fedora'
+node.default['selinux']['state'] = 'permissive'
+include_recipe 'selinux'
+end
+
 mysql_client 'default'
 mysql_chef_gem 'default'
 mysql_service 'default' do
