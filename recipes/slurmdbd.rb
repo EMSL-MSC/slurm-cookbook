@@ -16,4 +16,5 @@ service 'slurmdbd' do
   service_name node['slurm']['service_db_name']
   supports [:start, :restart, :status, :stop]
   subscribes :restart, "service[slurm]", :immediately
+  action [ :enable, :start ]
 end
