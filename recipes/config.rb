@@ -28,6 +28,16 @@ node['slurm']['slurm']['partitions'].each do |part_hash|
   partition_lines.push(part)
 end
 
+template "slurmdbd_conf" do
+  path node['slurm']['configdir']+"/slurmdbd.conf"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(
+    :config => node['slurm']['slurmdbd']['config']
+  )
+end
+
 template "slurm_conf" do
   path node['slurm']['configdir']+"/slurm.conf"
   owner "root"
@@ -37,16 +47,6 @@ template "slurm_conf" do
     :config => node['slurm']['slurm']['config'],
     :nodes => node_lines,
     :partitions => partition_lines
-  )
-end
-
-template "slurmdbd_conf" do
-  path node['slurm']['configdir']+"/slurmdbd.conf"
-  owner "root"
-  group "root"
-  mode "0644"
-  variables(
-    :config => node['slurm']['slurmdbd']['config']
   )
 end
 
