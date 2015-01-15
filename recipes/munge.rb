@@ -32,16 +32,17 @@ if node['slurm'].has_key?("mungekey")
     group "munge"
     mode "0400"
     path "/etc/munge/munge.key.base64"
-    notifies :run, "execute[convert-mungekey]"
+    notifies :run, "bash[create-munge-key]"
     source "mungekey.erb"
     variables({
       :data => key_hash['mungekey']
     })
   end
-  execute "convert-mungekey" do
-    command "base64 -d < /etc/munge/munge.key.base64 > /etc/munge/munge.key"
+  bash "create-munge-key" do
+    user "root"
+    cwd "/tmp"
+    code "base64 -d < /etc/munge/munge.key.base64 > /etc/munge/munge.key"
     action :nothing
-    notifies :restart, 'service[munge]'
   end
 else
   bash "create-munge-key" do
@@ -49,7 +50,6 @@ else
     cwd "/tmp"
     code "create-munge-key"
     not_if "test -e /etc/munge/munge.key"
-    notifies :restart, 'service[munge]'
   end
 end
 
@@ -63,4 +63,6 @@ end
 service 'munge' do
   service_name 'munge'
   supports [:start, :restart, :status, :stop]
+  subscribes :restart, 'bash[create-munge-key]', :immediately
+  action :nothing
 end
