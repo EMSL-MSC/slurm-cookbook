@@ -40,3 +40,13 @@ template "slurm_conf" do
   )
 end
 
+template "slurmdbd_conf" do
+  path node['slurm']['configdir']+"/slurmdbd.conf"
+  owner "root"
+  group "root"
+  mode "0644"
+  variables(
+    :config => node['slurm']['slurmdbd']['config']
+  )
+end
+
