@@ -41,13 +41,21 @@ suites:
 
   - name: slurm-install
     run_list:
+      - recipe[apt]
       - recipe[slurm::install]
+
+  - name: slurm-config
+    run_list:
+      - recipe[apt]
+      - recipe[slurm::config]
 
   - name: slurm-nodb
     run_list:
+      - recipe[apt]
       - recipe[slurm::slurm]
 
   - name: slurm-dblocal
     attributes:
     run_list:
+      - recipe[apt]
       - recipe[slurm::_test_mysql]

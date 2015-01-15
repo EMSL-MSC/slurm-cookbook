@@ -28,6 +28,8 @@ mysql_connection_info = {
   :password => node['mysql']['server_root_password']
 }
 
+execute "sleep 10"
+
 mysql_database slurmdbd_db do
   connection mysql_connection_info
   action :create
