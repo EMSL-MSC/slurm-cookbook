@@ -1,9 +1,11 @@
 include_recipe 'slurm::install'
 include_recipe 'slurm::munge'
 
-hostsfile_entry node['ipaddress'] do
-  hostname  node['hostname']
-  unique    true
+if node['hostname'] != 'localhost'
+  hostsfile_entry node['ipaddress'] do
+    hostname  node['hostname']
+    unique    true
+  end
 end
 
 node_lines = []
