@@ -99,7 +99,7 @@ default['slurm']['rpmbuildopts'] = "--with numactl --with hwloc --with munge"
 case node['platform_family']
 when 'rhel'
   case node['platform']
-  when 'centos'
+  when 'centos','scientific','redhat'
     default['slurm']['buildit'] = true
     default['slurm']['pkgrepos'] = ['yum-epel']
     default['slurm']['packages']['slurm'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
