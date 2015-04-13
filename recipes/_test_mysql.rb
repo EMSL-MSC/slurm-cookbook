@@ -11,7 +11,7 @@ include_recipe 'selinux'
 end
 
 mysql_client 'default'
-mysql_chef_gem 'default'
+mysql2_chef_gem 'default'
 mysql_service 'default' do
   initial_root_password node['mysql']['server_root_password']
   action [:create, :start]
