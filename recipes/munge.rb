@@ -15,7 +15,7 @@ if node['slurm'].has_key?("mungekey")
     when 'vault'
       chef_gem "chef-vault"
       require 'chef-vault'
-      key_item = ChefVault::Item.load("slurm", "mungekey")
+      key_item = chef_vault_item("slurm", "mungekey")
     when 'databag'
       secret_key = Chef::EncryptedDataBagItem.load_secret(Chef::Config['encrypted_data_bag_secret'])
       key_item = Chef::EncryptedDataBagItem.load("slurm", "mungekey", secret_key)

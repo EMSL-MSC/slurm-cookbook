@@ -34,7 +34,7 @@ GRAPH
   rbac (1.0.2)
   resource-control (0.1.1)
   selinux (0.8.0)
-  slurm (0.1.0)
+  slurm (0.1.1)
     database (>= 0.0.0)
     hostsfile (>= 0.0.0)
     mariadb (>= 0.0.0)
