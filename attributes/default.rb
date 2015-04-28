@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-default['slurm']['version'] = "14.11.5"
+default['slurm']['version'] = "14.11.6"
 default['slurm']['cluster_name'] = "localhost"
 default['slurm']['url'] = "http://www.schedmd.com/download/latest/slurm-#{node['slurm']['version']}.tar.bz2"
 
