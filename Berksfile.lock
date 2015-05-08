@@ -15,7 +15,7 @@ GRAPH
     apt (>= 0.0.0)
     yum (>= 0.0.0)
     yum-epel (>= 0.0.0)
-  mysql (6.0.21)
+  mysql (6.0.22)
     smf (>= 0.0.0)
     yum-mysql-community (>= 0.0.0)
   mysql2_chef_gem (1.0.1)
