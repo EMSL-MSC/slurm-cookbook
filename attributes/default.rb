@@ -69,6 +69,15 @@ default['slurm']['slurmdbd']['config'] = {
   "LogFile" => "/var/log/slurmdbd.log"
 }
 
+# fix pidfile for rhel 7 systemd family of OSs
+if node['platform_family'] == 'rhel'
+  if node['platform_version'].to_i >= 7
+    default['slurm']['slurm']['config']['SlurmctldPidFile'] = '/var/run/slurm/slurmctld.pid'
+    default['slurm']['slurm']['config']['SlurmdPidFile'] = '/var/run/slurm/slurmd.pid'
+    default['slurm']['slurmdbd']['config']['PidFile'] = '/var/run/slurm/slurmdbd.pid'
+  end
+end
+
 case node['platform_family']
 when 'rhel', 'fedora'
   default['slurm']['packages']['build'] = [
@@ -104,23 +113,27 @@ when 'rhel'
     default['slurm']['pkgrepos'] = ['yum-epel']
     default['slurm']['packages']['slurm'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
     default['slurm']['configdir'] = '/etc/slurm'
-    default['slurm']['service_name'] = 'slurm'
-    default['slurm']['service_db_name'] = 'slurmdbd'
+    if node['platform_version'].to_i >= 7
+      default['slurm']['service_name'] = ['slurmd', 'slurmctld']
+    else
+      default['slurm']['service_name'] = ['slurm']
+    end
+    default['slurm']['service_db_name'] = ['slurmdbd']
   end
 when 'fedora'
   default['slurm']['buildit'] = true
   default['slurm']['packages']['slurm'] = ['slurm', 'slurm-munge', 'slurm-slurmdbd', 'munge', 'slurm-plugins']
   default['slurm']['configdir'] = '/etc/slurm'
-  default['slurm']['service_name'] = 'slurm'
-  default['slurm']['service_db_name'] = 'slurmdbd'
+  default['slurm']['service_name'] = ['slurm']
+  default['slurm']['service_db_name'] = ['slurmdbd']
 when 'debian'
   default['slurm']['buildit'] = false
   default['slurm']['packages']['slurm'] = ['slurm-llnl', 'slurm-llnl-basic-plugins', 'slurm-llnl-slurmdbd', 'munge']
   # we don't build for this OS
   default['slurm']['packages']['build'] = []
   default['slurm']['configdir'] = '/etc/slurm-llnl'
-  default['slurm']['service_name'] = 'slurm-llnl'
-  default['slurm']['service_db_name'] = 'slurm-llnl-slurmdbd'
+  default['slurm']['service_name'] = ['slurm-llnl']
+  default['slurm']['service_db_name'] = ['slurm-llnl-slurmdbd']
 else
   Chef::Log.error("Unsupported Platform Family: #{node['platform_family']}")
 end

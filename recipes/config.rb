@@ -30,6 +30,12 @@ node['slurm']['slurm']['partitions'].each do |part_hash|
   partition_lines.push(part)
 end
 
+template "/etc/default/slurm"
+template "/etc/default/slurmd"
+template "/etc/default/slurmctld"
+template "/etc/default/slurmdbd"
+directory "/var/run/slurm"
+
 template "slurmdbd_conf" do
   path node['slurm']['configdir']+"/slurmdbd.conf"
   owner "root"
