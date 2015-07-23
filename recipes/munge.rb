@@ -62,7 +62,7 @@ end
 
 service 'munge' do
   service_name 'munge'
-  supports [:start, :restart, :status, :stop]
+  supports [:enable, :start, :restart, :status, :stop]
   subscribes :restart, 'bash[create-munge-key]', :immediately
-  action :nothing
+  action :enable
 end
