@@ -1,29 +1,15 @@
 ---
 driver:
-  name: openstack
+  name: vagrant
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 11.18.12
-  chef_omnibus_url: https://www.getchef.com/chef/install.sh
 
 platforms:
-  - name: <%= ENV['IMAGE_NICE_NAME'] %>
-    driver_plugin: openstack
-    driver_config:
-      openstack_username: <%= ENV['OS_USERNAME'] %>
-      openstack_api_key:  <%= ENV['OS_PASSWORD'] %>
-      openstack_tenant: <%= ENV['OS_TENANT_NAME'] %>
-      openstack_auth_url:  <%= "#{ENV['OS_AUTH_URL']}/tokens" %>
-      network_ref: <%= ENV['NETWORK_NAME'] %>
-      security_groups: <%= ENV['SECURITY_GROUPS'] %>
-      image_ref: <%= ENV['IMAGE_REF_ID'] %>
-      flavor_ref: <%= ENV['FLAVOR_REF_ID'] %>
-      key_name: <%= ENV['KEY_NAME'] %>
-      username: <%= ENV['SSH_USERNAME'] %>
-      public_key_path: /home/<%= ENV['USER'] %>/.ssh/id_rsa.pub
-      private_key_path: /home/<%= ENV['USER'] %>/.ssh/id_rsa
-      user_data: hostname-hack.txt
+  - name: centos-5.11
+  - name: centos-6.7
+  - name: centos-7.2
+  - name: ubuntu-14.04
 
 suites:
   - name: munge-databag-key

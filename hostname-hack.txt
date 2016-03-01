@@ -1,3 +1,0 @@
-#cloud-config
-preserve_hostname: true
-manage_etc_hosts: false
