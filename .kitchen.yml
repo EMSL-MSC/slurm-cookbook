@@ -4,6 +4,7 @@ driver:
 
 provisioner:
   name: chef_zero
+  encrypted_data_bag_secret_key_path: 'test/integration/encrypted_data_bag_secret'
 
 platforms:
   - name: centos-5.11
@@ -18,21 +19,17 @@ platforms:
 
 suites:
   - name: slurm-install
-    encrypted_data_bag_secret_key_path: 'test/integration/encrypted_data_bag_secret'
     run_list:
       - recipe[slurm::install]
 
   - name: slurm-config
-    encrypted_data_bag_secret_key_path: 'test/integration/encrypted_data_bag_secret'
     run_list:
       - recipe[slurm::config]
 
   - name: slurm-nodb
-    encrypted_data_bag_secret_key_path: 'test/integration/encrypted_data_bag_secret'
     run_list:
       - recipe[slurm::slurm]
 
   - name: slurm-dblocal
-    encrypted_data_bag_secret_key_path: 'test/integration/encrypted_data_bag_secret'
     run_list:
       - recipe[local_mysql]
