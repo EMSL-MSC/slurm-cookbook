@@ -7,41 +7,32 @@ provisioner:
 
 platforms:
   - name: centos-5.11
-  - name: centos-6.7
+  - name: centos-6.8
   - name: centos-7.2
   - name: ubuntu-14.04
-
-suites:
-  - name: munge-databag-key
-    data_bags_path: "test/integration/default/data_bags"
-    encrypted_data_bag_secret_key_path: "test/integration/default/encrypted_data_bag_secret"
-    run_list:
-      - recipe[slurm::munge]
-    attributes:
-      slurm:
-        mungekey:
-          type: "databag"
-  - name: munge-default
-    run_list:
-      - recipe[slurm::munge]
-
-  - name: slurm-install
     run_list:
       - recipe[apt]
+  - name: ubuntu-16.04
+    run_list:
+      - recipe[apt]
+
+suites:
+  - name: slurm-install
+    encrypted_data_bag_secret_key_path: 'test/integration/encrypted_data_bag_secret'
+    run_list:
       - recipe[slurm::install]
 
   - name: slurm-config
+    encrypted_data_bag_secret_key_path: 'test/integration/encrypted_data_bag_secret'
     run_list:
-      - recipe[apt]
       - recipe[slurm::config]
 
   - name: slurm-nodb
+    encrypted_data_bag_secret_key_path: 'test/integration/encrypted_data_bag_secret'
     run_list:
-      - recipe[apt]
       - recipe[slurm::slurm]
 
   - name: slurm-dblocal
-    attributes:
+    encrypted_data_bag_secret_key_path: 'test/integration/encrypted_data_bag_secret'
     run_list:
-      - recipe[apt]
-      - recipe[slurm::_test_mysql]
+      - recipe[local_mysql]

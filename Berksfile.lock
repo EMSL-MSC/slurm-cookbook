@@ -39,7 +39,7 @@ GRAPH
     openssl (~> 4.0)
   rbac (1.0.3)
   selinux (0.9.0)
-  slurm (0.1.3)
+  slurm (1.0.0)
     build-essential (>= 0.0.0)
     database (>= 0.0.0)
     hostsfile (>= 0.0.0)

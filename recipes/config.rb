@@ -1,5 +1,5 @@
 include_recipe 'slurm::install'
-include_recipe 'slurm::munge'
+include_recipe 'munge'
 
 node_lines = []
 node['slurm']['slurm']['nodes'].each do |line_hash|
