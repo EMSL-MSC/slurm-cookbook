@@ -3,6 +3,10 @@ slurm CHANGELOG
 
 This file is used to list changes made in each version of the slurm cookbook.
 
+1.0.0
+-----
+- David Brown <david.brown@pnnl.gov> - utilize searching to find parts of the cluster
+
 0.1.0
 -----
 - David Brown <david.brown@pnnl.gov> - Initial release of slurm

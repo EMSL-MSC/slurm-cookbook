@@ -2,4 +2,4 @@ source "https://supermarket.getchef.com"
 
 metadata
 
-cookbook 'apt'
+cookbook 'munge', github: 'dmlb2000/munge-cookbook'

@@ -1,4 +1,4 @@
-include_recipe 'slurm::munge'
+include_recipe 'munge'
 
 if node['slurm'].has_key?('buildit') and node['slurm']['buildit']
   case node['platform_family']
