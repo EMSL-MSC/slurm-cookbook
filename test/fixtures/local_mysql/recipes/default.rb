@@ -10,7 +10,9 @@ node.default['selinux']['state'] = 'permissive'
 include_recipe 'selinux'
 end
 
-mysql_client 'default'
+mysql_client 'default' do
+  package_name 'mysql-devel'
+end
 mysql2_chef_gem 'default'
 mysql_service 'default' do
   initial_root_password node['mysql']['server_root_password']

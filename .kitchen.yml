@@ -32,4 +32,4 @@ suites:
 
   - name: slurm-dblocal
     run_list:
-      - recipe[local_mysql]
+      - recipe[slurm_local_mysql]
